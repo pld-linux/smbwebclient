@@ -5,7 +5,8 @@ Version:	2.0.5
 Release:	1
 License:	GPL
 Group:		Applications/System
-Source0:	%{name}-2.0.5.tar.gz
+Source0:	http://www.nivel0.net/SmbWebClient/files.xml?action=download&file=%{name}-2.0.5.tar.gz
+# Source0-md5:	7bd55baaf8d564dc47613d7402464d70
 URL:		http://www.nivel0.net/SmbWebClient/
 Requires:	php
 Requires:	samba-client
