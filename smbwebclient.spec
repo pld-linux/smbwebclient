@@ -6,7 +6,7 @@ Release:	1
 License:	GPL
 Group:		Applications/System
 Source0:	%{name}-%{version}.tar.gz
-# Source0-md5:	25d3e9f84d2505a9016aab9c6e3ebe60
+# Source0-md5:	11ac417ca7b9d8f172826d639117ede8
 URL:		http://www.nivel0.net/SmbWebClient/
 Requires:	php
 Requires:	samba-client
