@@ -13,7 +13,7 @@ Requires:	samba-client
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define         _phpdir     /home/services/httpd/html
+%define		_phpdir		/home/services/httpd/html
 
 %description
 SmbWebClient is a simple script written by Victor M. Varela to use
