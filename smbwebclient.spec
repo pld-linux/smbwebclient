@@ -7,13 +7,14 @@ License:	GPL
 Group:		Applications/System
 Source0:	%{name}-%{version}.tgz
 # Source0-md5:	4e081e88a6f941b1a17a8fb0b1bb42f4
+Source1:        %{name}.conf
 URL:		http://www.nivel0.net/archives/smbwebclient/
 Requires:	php
 Requires:	samba-client
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_phpdir		/home/services/httpd/html
+%define		_phpdir		%{_datadir}/%{name}
 
 %description
 SmbWebClient is a simple script written by Victor M. Varela to use
@@ -28,13 +29,43 @@ celu korzystania z sieci Windows z poziomu przegl±darki internetowej.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_phpdir}
+install -d $RPM_BUILD_ROOT{%{_phpdir},/etc/httpd}
 
 install smbwebclient.php $RPM_BUILD_ROOT%{_phpdir}
+
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post
+if [ -f /etc/httpd/httpd.conf ] && ! grep -q "^Include.*%{name}.conf" /etc/httpd/httpd.conf; then
+        echo "Include /etc/httpd/%{name}.conf" >> /etc/httpd/httpd.conf
+elif [ -d /etc/httpd/httpd.conf ]; then
+        ln -sf /etc/httpd/%{name}.conf /etc/httpd/httpd.conf/99_%{name}.conf
+fi
+if [ -f /var/lock/subsys/httpd ]; then
+        /usr/sbin/apachectl restart 1>&2
+fi
+
+%preun
+if [ "$1" = "0" ]; then
+        umask 027
+        if [ -d /etc/httpd/httpd.conf ]; then
+                rm -f /etc/httpd/httpd.conf/99_%{name}.conf
+        else
+                grep -v "^Include.*%{name}.conf" /etc/httpd/httpd.conf > \
+                        /etc/httpd/httpd.conf.tmp
+                mv -f /etc/httpd/httpd.conf.tmp /etc/httpd/httpd.conf
+                if [ -f /var/lock/subsys/httpd ]; then
+                        /usr/sbin/apachectl restart 1>&2
+                fi
+        fi
+fi
+
 %files
 %defattr(644,root,root,755)
 %{_phpdir}/smbwebclient.php
+%dir %{_sysconfdir}
+%attr(640,root,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*
+%config(noreplace) %verify(not size mtime md5) /etc/httpd/%{name}.conf
