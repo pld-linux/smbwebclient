@@ -24,7 +24,7 @@ SmbWebClient jest prostym skryptem napisanym przez Victora M. Varela w
 celu korzystania z sieci Windows z poziomu przegl±darki internetowej.
 
 %prep
-%setup -q -c
+%setup -q
 
 %install
 rm -rf $RPM_BUILD_ROOT
