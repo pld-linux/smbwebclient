@@ -7,7 +7,7 @@ License:	GPL
 Group:		Applications/System
 Source0:	%{name}-%{version}.tgz
 # Source0-md5:	4e081e88a6f941b1a17a8fb0b1bb42f4
-URL:		http://www.nivel0.net/SmbWebClient/
+URL:		http://www.nivel0.net/archives/smbwebclient/
 Requires:	php
 Requires:	samba-client
 BuildArch:	noarch
