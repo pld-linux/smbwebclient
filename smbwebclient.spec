@@ -36,4 +36,4 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%attr(775,root,http) %{_phpdir}/smbwebclient.php
+%{_phpdir}/smbwebclient.php
