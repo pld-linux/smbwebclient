@@ -7,7 +7,7 @@ License:	GPL
 Group:		Applications/System
 Source0:	%{name}-%{version}.tgz
 # Source0-md5:	4e081e88a6f941b1a17a8fb0b1bb42f4
-Source1:        %{name}.conf
+Source1:	%{name}.conf
 URL:		http://www.nivel0.net/archives/smbwebclient/
 Requires:	php
 Requires:	samba-client
@@ -40,27 +40,27 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 if [ -f /etc/httpd/httpd.conf ] && ! grep -q "^Include.*%{name}.conf" /etc/httpd/httpd.conf; then
-        echo "Include /etc/httpd/%{name}.conf" >> /etc/httpd/httpd.conf
+	echo "Include /etc/httpd/%{name}.conf" >> /etc/httpd/httpd.conf
 elif [ -d /etc/httpd/httpd.conf ]; then
-        ln -sf /etc/httpd/%{name}.conf /etc/httpd/httpd.conf/99_%{name}.conf
+	ln -sf /etc/httpd/%{name}.conf /etc/httpd/httpd.conf/99_%{name}.conf
 fi
 if [ -f /var/lock/subsys/httpd ]; then
-        /usr/sbin/apachectl restart 1>&2
+	/usr/sbin/apachectl restart 1>&2
 fi
 
 %preun
 if [ "$1" = "0" ]; then
-        umask 027
-        if [ -d /etc/httpd/httpd.conf ]; then
-                rm -f /etc/httpd/httpd.conf/99_%{name}.conf
-        else
-                grep -v "^Include.*%{name}.conf" /etc/httpd/httpd.conf > \
-                        /etc/httpd/httpd.conf.tmp
-                mv -f /etc/httpd/httpd.conf.tmp /etc/httpd/httpd.conf
-                if [ -f /var/lock/subsys/httpd ]; then
-                        /usr/sbin/apachectl restart 1>&2
-                fi
-        fi
+	umask 027
+	if [ -d /etc/httpd/httpd.conf ]; then
+		rm -f /etc/httpd/httpd.conf/99_%{name}.conf
+	else
+		grep -v "^Include.*%{name}.conf" /etc/httpd/httpd.conf > \
+			/etc/httpd/httpd.conf.tmp
+		mv -f /etc/httpd/httpd.conf.tmp /etc/httpd/httpd.conf
+		if [ -f /var/lock/subsys/httpd ]; then
+			/usr/sbin/apachectl restart 1>&2
+		fi
+	fi
 fi
 
 %files
