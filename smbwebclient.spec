@@ -1,14 +1,14 @@
 Summary:	SmbWebClient - script to use Windows Networks from a web browser
 Summary(pl):	SmbWebClient - skrypt do u¿ywania sieci Windows z przegl±darki
 Name:		smbwebclient
-Version:	2.0.14
+Version:	2.0.15
 Release:	1
 License:	GPL
 Group:		Applications/System
-Source0:	%{name}-%{version}.tgz
-# Source0-md5:	4e081e88a6f941b1a17a8fb0b1bb42f4
+Source0:	http://dl.sourceforge.net/smbwebclient/%{name}-%{version}.tgz
+# Source0-md5:	9d97cf439d2b05a8f962b188a8011e44
 Source1:	%{name}.conf
-URL:		http://www.nivel0.net/archives/smbwebclient/
+URL:		http://smbwebclient.sourceforge.net/
 Requires:	php
 Requires:	samba-client
 BuildArch:	noarch
@@ -29,11 +29,11 @@ celu korzystania z sieci Windows z poziomu przegl±darki internetowej.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_phpdir},/etc/httpd}
+install -d $RPM_BUILD_ROOT{%{_phpdir},%{_sysconfdir}/httpd}
 
 install smbwebclient.php $RPM_BUILD_ROOT%{_phpdir}
 
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
+install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd/%{name}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -68,4 +68,4 @@ fi
 %{_phpdir}/smbwebclient.php
 %dir %{_sysconfdir}
 %attr(640,root,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*
-%config(noreplace) %verify(not size mtime md5) /etc/httpd/%{name}.conf
+%config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/httpd/%{name}.conf
