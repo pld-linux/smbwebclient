@@ -6,20 +6,20 @@ Release:	1
 License:	GPL
 Group:		Applications/System
 Source0:	%{name}-%{version}.tar.gz
-URL:		http://www.nivel0.net/SmbWebClient
+URL:		http://www.nivel0.net/SmbWebClient/
 Requires:	php
 Requires:	samba-client
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define         _phpdir     /home/services/httpd/html/
+%define         _phpdir     /home/services/httpd/html
 
 %description
 SmbWebClient is a simple script written by Victor M. Varela to use
 Windows Networks from a web browser.
 
 %description -l pl
-SmbWebClient jest prostym skryptem napisanym przez Vicror M. Varela w
+SmbWebClient jest prostym skryptem napisanym przez Victora M. Varela w
 celu korzystania z sieci Windows z poziomu przegl±darki internetowej.
 
 %prep
