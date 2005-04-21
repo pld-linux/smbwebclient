@@ -1,12 +1,12 @@
 Summary:	SmbWebClient - script to use Windows Networks from a web browser
 Summary(pl):	SmbWebClient - skrypt do u¿ywania sieci Windows z przegl±darki
 Name:		smbwebclient
-Version:	2.8
+Version:	2.9
 Release:	1
 License:	GPL
 Group:		Applications/System
 Source0:	http://dl.sourceforge.net/smbwebclient/%{name}-%{version}.php.gz
-# Source0-md5:	da9c6b91164a568d9dee4c283920ad68
+# Source0-md5:	9c4a18d2bc477989a85d55f8ba55bc50
 Source1:	%{name}.conf
 URL:		http://smbwebclient.sourceforge.net/
 Requires:	php
