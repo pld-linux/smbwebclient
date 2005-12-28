@@ -2,7 +2,7 @@ Summary:	SmbWebClient - script to use Windows Networks from a web browser
 Summary(pl):	SmbWebClient - skrypt do u¿ywania sieci Windows z przegl±darki
 Name:		smbwebclient
 Version:	2.9
-Release:	1.3
+Release:	1.5
 License:	GPL
 Group:		Applications/WWW
 Source0:	http://dl.sourceforge.net/smbwebclient/%{name}-%{version}.php.gz
@@ -12,10 +12,14 @@ URL:		http://smbwebclient.sourceforge.net/
 BuildRequires:	rpmbuild(macros) >= 1.226
 Requires:	php
 Requires:	samba-client
+Requires:	webapps
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_phpdir		%{_datadir}/%{name}
+%define		_webapps	/etc/webapps
+%define		_webapp		%{name}
+%define		_sysconfdir	%{_webapps}/%{_webapp}
+%define		_appdir		%{_datadir}/%{_webapp}
 
 %description
 SmbWebClient is a simple script written by Victor M. Varela to use
@@ -30,26 +34,58 @@ gunzip -dc %{SOURCE0} > %{name}.php
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_phpdir},%{_sysconfdir}/httpd}
-install %{name}.php $RPM_BUILD_ROOT%{_phpdir}/smbwebclient.php
-install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache-%{name}.conf
+install -d $RPM_BUILD_ROOT{%{_appdir},%{_sysconfdir}/httpd}
+install %{name}.php $RPM_BUILD_ROOT%{_appdir}/smbwebclient.php
+install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
+install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%triggerin -- apache1 >= 1.3.33-2
-%apache_config_install -v 1 -c %{_sysconfdir}/apache-%{name}.conf
+%triggerin -- apache1
+%webapp_register apache %{_webapp}
 
-%triggerun -- apache1 >= 1.3.33-2
-%apache_config_uninstall -v 1
+%triggerun -- apache1
+%webapp_unregister apache %{_webapp}
 
 %triggerin -- apache >= 2.0.0
-%apache_config_install -v 2 -c %{_sysconfdir}/apache-%{name}.conf
+%webapp_register httpd %{_webapp}
 
 %triggerun -- apache >= 2.0.0
-%apache_config_uninstall -v 2
+%webapp_unregister httpd %{_webapp}
+
+%triggerpostun -- %{name} < 2.9-1.5
+if [ -f /etc/apache-%{name}.conf.rpmsave ]; then
+	if [ -d /etc/apache/webapps.d ]; then
+		cp -f %{_sysconfdir}/apache.conf{,.rpmnew}
+		cp -f /etc/apache-%{name}.conf.rpmsave %{_sysconfdir}/apache.conf
+	fi
+
+	if [ -d /etc/httpd/webapps.d ]; then
+		cp -f %{_sysconfdir}/httpd.conf{,.rpmnew}
+		cp -f /etc/apache-%{name}.conf.rpmsave %{_sysconfdir}/httpd.conf
+	fi
+	rm -f /etc/apache-%{name}.conf.rpmsave
+fi
+
+if [ -L /etc/apache/conf.d/99_%{name}.conf ]; then
+	rm -f /etc/apache/conf.d/99_%{name}.conf
+	/usr/sbin/webapp register apache %{_webapp}
+	if [ -f /var/lock/subsys/apache ]; then
+		/etc/rc.d/init.d/apache reload 1>&2
+	fi
+fi
+if [ -L /etc/httpd/httpd.conf/99_%{name}.conf ]; then
+	rm -f /etc/httpd/httpd.conf/99_%{name}.conf
+	/usr/sbin/webapp register httpd %{_webapp}
+	if [ -f /var/lock/subsys/httpd ]; then
+		/etc/rc.d/init.d/httpd reload 1>&2
+	fi
+fi
 
 %files
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache-%{name}.conf
-%{_phpdir}
+%dir %attr(750,root,http) %{_sysconfdir}
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf
+%{_appdir}
