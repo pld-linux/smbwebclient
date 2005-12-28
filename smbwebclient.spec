@@ -2,12 +2,14 @@ Summary:	SmbWebClient - script to use Windows Networks from a web browser
 Summary(pl):	SmbWebClient - skrypt do u¿ywania sieci Windows z przegl±darki
 Name:		smbwebclient
 Version:	2.9
-Release:	1.5
+Release:	1.6
 License:	GPL
 Group:		Applications/WWW
 Source0:	http://dl.sourceforge.net/smbwebclient/%{name}-%{version}.php.gz
 # Source0-md5:	9c4a18d2bc477989a85d55f8ba55bc50
 Source1:	%{name}.conf
+Source2:	%{name}-config.php
+Source3:	%{name}-wrapper.php
 URL:		http://smbwebclient.sourceforge.net/
 BuildRequires:	rpmbuild(macros) >= 1.226
 Requires:	php
@@ -38,6 +40,8 @@ install -d $RPM_BUILD_ROOT{%{_appdir},%{_sysconfdir}/httpd}
 install %{name}.php $RPM_BUILD_ROOT%{_appdir}/smbwebclient.php
 install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache.conf
 install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/httpd.conf
+install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/config.php
+install %{SOURCE3} $RPM_BUILD_ROOT%{_appdir}/index.php
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -88,4 +92,5 @@ fi
 %dir %attr(750,root,http) %{_sysconfdir}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/httpd.conf
+%attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*.php
 %{_appdir}
