@@ -11,7 +11,7 @@ Source1:	%{name}.conf
 Source2:	%{name}-config.php
 Source3:	%{name}-wrapper.php
 URL:		http://smbwebclient.sourceforge.net/
-BuildRequires:	rpmbuild(macros) >= 1.226
+BuildRequires:	rpmbuild(macros) >= 1.264
 Requires:	php
 Requires:	samba-client
 Requires:	webapps
