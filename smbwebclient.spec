@@ -11,7 +11,7 @@ Source1:	%{name}.conf
 Source2:	%{name}-config.php
 Source3:	%{name}-wrapper.php
 URL:		http://smbwebclient.sourceforge.net/
-BuildRequires:	rpmbuild(macros) >= 1.264
+BuildRequires:	rpmbuild(macros) >= 1.268
 Requires:	php >= 3:4.1
 Requires:	samba-client
 Requires:	webapps
@@ -75,16 +75,12 @@ fi
 if [ -L /etc/apache/conf.d/99_%{name}.conf ]; then
 	rm -f /etc/apache/conf.d/99_%{name}.conf
 	/usr/sbin/webapp register apache %{_webapp}
-	if [ -f /var/lock/subsys/apache ]; then
-		/etc/rc.d/init.d/apache reload 1>&2
-	fi
+	%service -q apache reload
 fi
 if [ -L /etc/httpd/httpd.conf/99_%{name}.conf ]; then
 	rm -f /etc/httpd/httpd.conf/99_%{name}.conf
 	/usr/sbin/webapp register httpd %{_webapp}
-	if [ -f /var/lock/subsys/httpd ]; then
-		/etc/rc.d/init.d/httpd reload 1>&2
-	fi
+	%service -q httpd reload
 fi
 
 %files
