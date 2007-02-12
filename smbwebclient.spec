@@ -1,5 +1,5 @@
 Summary:	SmbWebClient - script to use Windows Networks from a web browser
-Summary(pl.UTF-8):   SmbWebClient - skrypt do używania sieci Windows z przeglądarki
+Summary(pl.UTF-8):	SmbWebClient - skrypt do używania sieci Windows z przeglądarki
 Name:		smbwebclient
 Version:	2.9
 Release:	3
